@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Database Demo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        
+        .search-container {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        input[type="text"] {
+            padding: 8px;
+            width: 200px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        
+        button {
+            padding: 8px 20px;
+            border: none;
+            background-color: #4CAF50;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        button:hover {
+            background-color: #45a049;
+        }
+        
+        #studentList {
+            border: 1px solid #ccc;
+            padding: 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Student Database System</h1>
+        <div class="search-container">
+            <input type="text" id="searchInput" placeholder="Search...">
+            <button onclick="search()">Search</button>
+        </div>
+        <div id="studentList"></div>
+        <button onclick="addStudent()">Add Student</button>
+    </div>
+
+    <script>
+        // Initialize an empty array to store student data
+        const students = [
+            { id: 1, name: 'John Doe', age: 20, grade: 'A', contact: '1234567890', department: 'Computer Science' },
+            { id: 2, name: 'Jane Smith', age: 21, grade: 'B', contact: '9876543210', department: 'Electrical Engineering' },
+            { id: 3, name: 'Alice Johnson', age: 22, grade: 'A', contact: '4567890123', department: 'Mechanical Engineering' },
+            { id: 4, name: 'Bob Brown', age: 19, grade: 'C', contact: '7890123456', department: 'Civil Engineering' },
+            { id: 5, name: 'Charlie Davis', age: 20, grade: 'A', contact: '2345678901', department: 'Chemical Engineering' }
+        ];
+
+        // Function to prompt user for student information
+        function addStudent() {
+            const name = prompt("Enter student's name:");
+            const id = parseInt(prompt("Enter student's ID:"));
+            const age = parseInt(prompt("Enter student's age:"));
+            const grade = prompt("Enter student's grade:");
+            const contact = prompt("Enter student's contact number:");
+            const department = prompt("Enter student's department:");
+            
+            // Validate inputs
+            if (isNaN(id) || isNaN(age) || name.trim() === '' || grade.trim() === '' || contact.trim() === '' || department.trim() === '') {
+                alert("Invalid input! Please enter valid information.");
+                return;
+            }
+            
+            // Create a new student object and add it to the students array
+            const student = { id, name, age, grade, contact, department };
+            students.push(student);
+            
+            // Display updated list of students
+            displayStudents(students);
+        }
+
+        // Function to display students
+        function displayStudents(studentData) {
+            const studentList = document.getElementById('studentList');
+            studentList.innerHTML = '';
+            if (studentData.length === 0) {
+                studentList.innerHTML = 'No students added yet.';
+                return;
+            }
+            const table = document.createElement('table');
+            table.innerHTML = `
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Age</th>
+                    <th>Grade</th>
+                    <th>Contact</th>
+                    <th>Department</th>
+                </tr>
+            `;
+            studentData.forEach(student => {
+                const row = table.insertRow();
+                row.innerHTML = `
+                    <td>${student.id}</td>
+                    <td>${student.name}</td>
+                    <td>${student.age}</td>
+                    <td>${student.grade}</td>
+                    <td>${student.contact}</td>
+                    <td>${student.department}</td>
+                `;
+                table.appendChild(row);
+            });
+            studentList.appendChild(table);
+        }
+
+        // Function to search students
+        function search() {
+            const searchText = document.getElementById('searchInput').value.toLowerCase();
+            const filteredStudents = students.filter(student =>
+                student.name.toLowerCase().includes(searchText) ||
+                student.id.toString().includes(searchText) ||
+                student.age.toString().includes(searchText) ||
+                student.grade.toLowerCase().includes(searchText) ||
+                student.contact.includes(searchText) ||
+                student.department.toLowerCase().includes(searchText)
+            );
+            displayStudents(filteredStudents);
+        }
+
+        // Display all students initially
+        displayStudents(students);
+    </script>
+</body>
+</html>
